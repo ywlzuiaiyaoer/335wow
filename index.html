@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-faction="alliance">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>雷加尔-秘境魔方-335魔兽世界</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --wow-gold: #d7b86a;
+      --text: #e9e7db;
+      --muted: #cfcab5;
+      --accent: #2b6db8;       /* 联盟 */
+      --accent-deep: #0e1b30;
+      --border: rgba(215,184,106,0.3);
+      --text-shadow-base: 0 1px 2px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,0.7);
+      --text-shadow-strong: 0 2px 2px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.6);
+      --spacing-xs: 8px;
+      --spacing-sm: 16px;
+      --spacing-md: 24px;
+      --spacing-lg: 32px;
+    }
+    html[data-faction="horde"] {
+      --accent: #a53030;
+      --accent-deep: #2b1111;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      font-family: 'Noto Serif SC', 'Cinzel', serif;
+      background: url('https://s1.imagehub.cc/images/2025/10/21/785700326f7c76e92aa054a5e8dbfa1a.webp') center/cover no-repeat fixed;
+      background-color: rgba(0, 0, 0, 0.45);
+      background-blend-mode: overlay;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--spacing-md);
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none;
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 60px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 60px);
+      mix-blend-mode: soft-light;
+    }
+
+    .frame {
+      width: 100%;
+      max-width: 1200px;
+      margin: var(--spacing-md) auto;
+      padding: var(--spacing-md);
+      position: relative;
+      background: transparent;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 30px rgba(215,184,106,0.08),
+                  inset 0 0 1px rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-lg);
+    }
+    .frame::before {
+      content: ""; position: absolute; inset: -1px; border-radius: 19px; z-index: -1;
+      background: linear-gradient(45deg, var(--wow-gold), transparent 70%);
+      filter: blur(8px); opacity: 0.3;
+    }
+
+    .hero {
+      text-align: center;
+      padding: var(--spacing-md) 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    h1 {
+      margin: 0; 
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 4px; 
+      color: var(--wow-gold);
+      text-shadow: 
+        0 1px 0 #000,
+        0 2px 0 #000,
+        0 3px 0 #000,
+        0 0 15px rgba(215,184,106,0.8),
+        0 0 30px rgba(215,184,106,0.5);
+      font-family: 'Cinzel', serif; 
+      font-weight: 700;
+      transform: perspective(800px) translateZ(15px);
+      transition: transform 0.3s ease;
+    }
+    h1:hover {
+      transform: perspective(800px) translateZ(25px) scale(1.02);
+    }
+
+    .tagline {
+      margin: 0;
+      color: var(--muted); 
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      text-shadow: var(--text-shadow-strong);
+      transform: perspective(600px) translateZ(5px);
+      letter-spacing: 1px;
+    }
+
+    .faction-toggle { 
+      display: flex; 
+      justify-content: center; 
+      gap: var(--spacing-sm); 
+      margin: var(--spacing-sm) 0; 
+    }
+    .btn {
+      cursor: pointer; 
+      padding: var(--spacing-xs) var(--spacing-md); 
+      border-radius: 8px; 
+      font-weight: 700; 
+      letter-spacing: 1px;
+      color: var(--text); 
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5),
+                  inset 0 0 8px rgba(255,255,255,0.05);
+      transition: all 0.2s ease;
+      text-shadow: var(--text-shadow-base);
+      white-space: nowrap;
+      outline: none;
+      user-select: none;
+    }
+    .btn:hover, .btn:focus {
+      border-color: rgba(215,184,106,0.5);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6),
+                  0 0 10px rgba(215,184,106,0.15),
+                  inset 0 0 10px rgba(215,184,106,0.05);
+      transform: translateY(-1px);
+    }
+    .btn.active {
+      border-color: var(--wow-gold);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1),
+                  0 0 15px rgba(215,184,106,0.3);
+    }
+
+    .groups { 
+      display: grid; 
+      gap: var(--spacing-md); 
+      margin-top: var(--spacing-sm); 
+    }
+    @media (min-width: 768px) {
+      .groups {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .groups {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .group {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; 
+      padding: var(--spacing-md);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+    .group h2 {
+      margin: 0 0 var(--spacing-sm); 
+      font-size: clamp(1.2rem, 3vw, 1.5rem); 
+      color: var(--wow-gold);
+      text-shadow: 
+        0 1px 2px rgba(0,0,0,0.8),
+        0 0 12px rgba(215,184,106,0.5);
+      letter-spacing: 1.5px;
+      transform: perspective(600px) translateZ(8px);
+      position: relative;
+      display: inline-block;
+    }
+    .group h2::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--wow-gold), transparent);
+      opacity: 0.6;
+    }
+
+    .link-list {
+      list-style: none; 
+      padding: 0; 
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    .link-list a {
+      display: flex; 
+      align-items: center; 
+      gap: var(--spacing-xs); 
+      text-decoration: none; 
+      color: var(--text);
+      padding: var(--spacing-sm); 
+      border-radius: 8px; 
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: transparent;
+      transition: all 0.2s ease;
+      text-shadow: var(--text-shadow-strong);
+      transform: perspective(600px) translateZ(3px);
+      font-weight: 500;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      cursor: pointer;
+    }
+    .link-list a::before {
+      content: ""; 
+      width: 24px; 
+      height: 24px; 
+      border-radius: 50%; 
+      flex: 0 0 24px;
+      background: radial-gradient(circle at 40% 35%, #fff 0 2px, var(--wow-gold) 4px, transparent 7px),
+                  conic-gradient(from 220deg, var(--accent), var(--accent-deep), var(--accent));
+      box-shadow: 0 0 15px var(--accent);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .link-list a:hover {
+      border-color: rgba(215,184,106,0.4);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5),
+                  0 0 15px rgba(215,184,106,0.2);
+      background: rgba(255,255,255,0.03);
+      transform: perspective(600px) translateZ(10px) translateY(-1px);
+    }
+    .link-sub {
+      color: #c7c2b0; 
+      font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+      text-shadow: 0 1px 1px rgba(0,0,0,0.8);
+      opacity: 0.9;
+    }
+
+    footer {
+      margin-top: var(--spacing-md); 
+      color: #bfb9a2; 
+      font-size: clamp(0.8rem, 1.5vw, 0.9rem); 
+      text-align: center;
+      text-shadow: var(--text-shadow-base);
+      opacity: 0.8;
+      transform: perspective(500px) translateZ(2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame" id="frame">
+    <header class="hero">
+      <h1>雷加尔魔兽·秘境魔方</h1>
+      <p class="tagline">穿越艾泽拉斯 11月新版本  从这里启程</p>
+      <div class="faction-toggle" role="group" aria-label="阵营主题切换">
+        <button class="btn alliance active" data-faction="alliance" aria-pressed="true">联盟</button>
+        <button class="btn horde" data-faction="horde" aria-pressed="false">部落</button>
+      </div>
+    </header>
+
+    <main class="groups">
+      <section class="group">
+        <h2>官方公告</h2>
+        <ul class="link-list">
+          <li><a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=arnppRjBMQkkyQEDmtPAUTSqHitkeAo4&authKey=o%2B1Ch2kxY314bGK1LmDkGprBc8MCbS6ajuryWU0E6%2Fb7OwUGhAuCzP122cUW0Dq0&noverify=0&group_code=971948904" target="_blank" rel="noopener noreferrer">游戏玩家QQ群 <span class="link-sub">点击加入</span></a></li>
+          <li><a href="https://www.battle.net/" target="_blank" rel="noopener noreferrer">游戏公告<span class="link-sub"></span>服务器内部测试中</a></li>
+          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">游戏更新<span class="link-sub"></span>服务器内部测试中</a></li>
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2>游戏下载区</h2>
+        <ul class="link-list">
+          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">登录器和完整补丁<span class="link-sub"></span>内部测试中</a></li>
+          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">本服专用高清客户端<span class="link-sub"></span>335版本</a></li>
+          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">游戏插件<span class="link-sub"></span>服务器内部测试中</a></li>
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2>游戏攻略</h2>
+        <ul class="link-list">
+          <li><a href="https://docs.qq.com/aio/DYmJra2dKdm5LR1V5?p=1czsPZJAw4Y22fhwZrp5NT" target="_blank" rel="noopener noreferrer">游戏介绍<span class="link-sub"></span>玩家必看</a></li>
+          <li><a href="https://wago.io/" target="_blank" rel="noopener noreferrer">Wago.io <span class="link-sub">WA字符串与模组</span></a></li>
+          <li><a href="https://www.tukui.org/" target="_blank" rel="noopener noreferrer">Tukui <span class="link-sub">ElvUI/BenikUI</span></a></li>
+          <li><a href="https://simplearmory.com/" target="_blank" rel="noopener noreferrer">Simple Armory <span class="link-sub">成就与收藏</span></a></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      本页面为魔兽世界主题风格的个人导航页，链接均指向公开站点。您可按需自行增删。
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // 修复阵营切换功能
+      const root = document.documentElement;
+      const btns = document.querySelectorAll('.faction-toggle .btn');
+      let saved = localStorage.getItem('wowNavFaction') || 'alliance';
+
+      // 确保初始状态正确
+      function applyFaction(faction) {
+        // 移除所有按钮的active类
+        btns.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        // 给当前阵营按钮添加active类
+        const activeBtn = document.querySelector(`.btn[data-faction="${faction}"]`);
+        if (activeBtn) {
+          activeBtn.classList.add('active');
+          activeBtn.setAttribute('aria-pressed', 'true');
+        }
+        // 更新根元素属性和本地存储
+        root.setAttribute('data-faction', faction);
+        localStorage.setItem('wowNavFaction', faction);
+      }
+
+      // 绑定按钮点击事件（确保事件能正常触发）
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyFaction(btn.dataset.faction);
+        });
+        // 支持键盘操作
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            applyFaction(btn.dataset.faction);
+          }
+        });
+      });
+
+      // 初始化
+      applyFaction(saved);
+
+      // 修复链接点击效果 - 只保留视觉反馈，移除重复打开窗口的逻辑
+      document.querySelectorAll('.link-list a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          // 仅保留视觉反馈，不干预<a>标签的默认跳转行为
+          this.style.opacity = '0.8';
+          // 移除了window.open()调用，避免与<a>标签默认行为冲突
+          setTimeout(() => {
+            this.style.opacity = '1'; // 可选项：恢复透明度
+          }, 150);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
