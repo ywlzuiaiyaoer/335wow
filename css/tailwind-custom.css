@@ -1,0 +1,37 @@
+/* 自定义色彩与工具类，兼容 Tailwind v2 的 CSS 变量体系 */
+
+/* 颜色与不透明度变量结合（文字） */
+.text-gold { --tw-text-opacity: 1; color: rgb(255 215 0 / var(--tw-text-opacity)); }
+.text-primary { --tw-text-opacity: 1; color: rgb(10 61 98 / var(--tw-text-opacity)); }
+.text-secondary { --tw-text-opacity: 1; color: rgb(196 30 58 / var(--tw-text-opacity)); }
+.text-tertiary { --tw-text-opacity: 1; color: rgb(30 95 41 / var(--tw-text-opacity)); }
+.text-glow-blue { color: rgba(100, 149, 237, 0.7); }
+
+/* 背景颜色 */
+.bg-gold { --tw-bg-opacity: 1; background-color: rgb(255 215 0 / var(--tw-bg-opacity)); }
+.bg-primary { --tw-bg-opacity: 1; background-color: rgb(10 61 98 / var(--tw-bg-opacity)); }
+.bg-secondary { --tw-bg-opacity: 1; background-color: rgb(196 30 58 / var(--tw-bg-opacity)); }
+.bg-tertiary { --tw-bg-opacity: 1; background-color: rgb(30 95 41 / var(--tw-bg-opacity)); }
+.bg-dark { --tw-bg-opacity: 1; background-color: rgb(15 28 45 / var(--tw-bg-opacity)); }
+.bg-dark-light { --tw-bg-opacity: 1; background-color: rgb(26 41 60 / var(--tw-bg-opacity)); }
+
+/* 边框颜色（和 border-opacity-* 配合） */
+.border-gold { --tw-border-opacity: 1; border-color: rgb(255 215 0 / var(--tw-border-opacity)); }
+
+/* 渐变色变量（与 bg-gradient-to-* 配合） */
+.from-dark { --tw-gradient-from: #0F1C2D; --tw-gradient-to: rgb(15 28 45 / 0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.to-dark-light { --tw-gradient-to: #1A293C; }
+
+/* 页面中使用的自定义工具类（从 index.html 迁移） */
+.text-shadow { text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); }
+.text-shadow-glow { text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.5); }
+.bg-gradient-game { background: linear-gradient(135deg, #0F1C2D 0%, #1A293C 100%); }
+.card-hover { transition: all 0.3s ease; }
+.card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(255, 215, 0, 0.3); }
+.download-btn { transition: all 0.3s ease; position: relative; overflow: hidden; background-image: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(0,0,0,0.1)); border: 1px solid rgba(255,215,0,0.3); }
+.download-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(255, 215, 0, 0.3); border-color: rgba(255,215,0,0.7); }
+.download-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: 0.5s; }
+.download-btn:hover::after { left: 100%; }
+.progress-bar { transition: width 0.5s ease; }
+.cube-container { perspective: 1000px; }
+.bg-blur { backdrop-filter: blur(8px); }

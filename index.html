@@ -1,359 +1,264 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-faction="alliance">
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>雷加尔-秘境魔方-335魔兽世界</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --wow-gold: #d7b86a;
-      --text: #e9e7db;
-      --muted: #cfcab5;
-      --accent: #2b6db8;       /* 联盟 */
-      --accent-deep: #0e1b30;
-      --border: rgba(215,184,106,0.3);
-      --text-shadow-base: 0 1px 2px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,0.7);
-      --text-shadow-strong: 0 2px 2px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.6);
-      --spacing-xs: 8px;
-      --spacing-sm: 16px;
-      --spacing-md: 24px;
-      --spacing-lg: 32px;
-    }
-    html[data-faction="horde"] {
-      --accent: #a53030;
-      --accent-deep: #2b1111;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh;
-      font-family: 'Noto Serif SC', 'Cinzel', serif;
-      background: url('https://s1.imagehub.cc/images/2025/10/21/785700326f7c76e92aa054a5e8dbfa1a.webp') center/cover no-repeat fixed;
-      background-color: rgba(0, 0, 0, 0.45);
-      background-blend-mode: overlay;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: var(--spacing-md);
-    }
-    body::before {
-      content: ""; position: fixed; inset: 0; pointer-events: none;
-      background:
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 60px),
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 60px);
-      mix-blend-mode: soft-light;
-    }
-
-    .frame {
-      width: 100%;
-      max-width: 1200px;
-      margin: var(--spacing-md) auto;
-      padding: var(--spacing-md);
-      position: relative;
-      background: transparent;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      box-shadow: 0 0 30px rgba(215,184,106,0.08),
-                  inset 0 0 1px rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-lg);
-    }
-    .frame::before {
-      content: ""; position: absolute; inset: -1px; border-radius: 19px; z-index: -1;
-      background: linear-gradient(45deg, var(--wow-gold), transparent 70%);
-      filter: blur(8px); opacity: 0.3;
-    }
-
-    .hero {
-      text-align: center;
-      padding: var(--spacing-md) 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--spacing-sm);
-    }
-
-    h1 {
-      margin: 0; 
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: 4px; 
-      color: var(--wow-gold);
-      text-shadow: 
-        0 1px 0 #000,
-        0 2px 0 #000,
-        0 3px 0 #000,
-        0 0 15px rgba(215,184,106,0.8),
-        0 0 30px rgba(215,184,106,0.5);
-      font-family: 'Cinzel', serif; 
-      font-weight: 700;
-      transform: perspective(800px) translateZ(15px);
-      transition: transform 0.3s ease;
-    }
-    h1:hover {
-      transform: perspective(800px) translateZ(25px) scale(1.02);
-    }
-
-    .tagline {
-      margin: 0;
-      color: var(--muted); 
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      text-shadow: var(--text-shadow-strong);
-      transform: perspective(600px) translateZ(5px);
-      letter-spacing: 1px;
-    }
-
-    .faction-toggle { 
-      display: flex; 
-      justify-content: center; 
-      gap: var(--spacing-sm); 
-      margin: var(--spacing-sm) 0; 
-    }
-    .btn {
-      cursor: pointer; 
-      padding: var(--spacing-xs) var(--spacing-md); 
-      border-radius: 8px; 
-      font-weight: 700; 
-      letter-spacing: 1px;
-      color: var(--text); 
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5),
-                  inset 0 0 8px rgba(255,255,255,0.05);
-      transition: all 0.2s ease;
-      text-shadow: var(--text-shadow-base);
-      white-space: nowrap;
-      outline: none;
-      user-select: none;
-    }
-    .btn:hover, .btn:focus {
-      border-color: rgba(215,184,106,0.5);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.6),
-                  0 0 10px rgba(215,184,106,0.15),
-                  inset 0 0 10px rgba(215,184,106,0.05);
-      transform: translateY(-1px);
-    }
-    .btn.active {
-      border-color: var(--wow-gold);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.1),
-                  0 0 15px rgba(215,184,106,0.3);
-    }
-
-    .groups { 
-      display: grid; 
-      gap: var(--spacing-md); 
-      margin-top: var(--spacing-sm); 
-    }
-    @media (min-width: 768px) {
-      .groups {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (min-width: 1024px) {
-      .groups {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    .group {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; 
-      padding: var(--spacing-md);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-sm);
-    }
-    .group h2 {
-      margin: 0 0 var(--spacing-sm); 
-      font-size: clamp(1.2rem, 3vw, 1.5rem); 
-      color: var(--wow-gold);
-      text-shadow: 
-        0 1px 2px rgba(0,0,0,0.8),
-        0 0 12px rgba(215,184,106,0.5);
-      letter-spacing: 1.5px;
-      transform: perspective(600px) translateZ(8px);
-      position: relative;
-      display: inline-block;
-    }
-    .group h2::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--wow-gold), transparent);
-      opacity: 0.6;
-    }
-
-    .link-list {
-      list-style: none; 
-      padding: 0; 
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-    .link-list a {
-      display: flex; 
-      align-items: center; 
-      gap: var(--spacing-xs); 
-      text-decoration: none; 
-      color: var(--text);
-      padding: var(--spacing-sm); 
-      border-radius: 8px; 
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: transparent;
-      transition: all 0.2s ease;
-      text-shadow: var(--text-shadow-strong);
-      transform: perspective(600px) translateZ(3px);
-      font-weight: 500;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      cursor: pointer;
-    }
-    .link-list a::before {
-      content: ""; 
-      width: 24px; 
-      height: 24px; 
-      border-radius: 50%; 
-      flex: 0 0 24px;
-      background: radial-gradient(circle at 40% 35%, #fff 0 2px, var(--wow-gold) 4px, transparent 7px),
-                  conic-gradient(from 220deg, var(--accent), var(--accent-deep), var(--accent));
-      box-shadow: 0 0 15px var(--accent);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .link-list a:hover {
-      border-color: rgba(215,184,106,0.4);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5),
-                  0 0 15px rgba(215,184,106,0.2);
-      background: rgba(255,255,255,0.03);
-      transform: perspective(600px) translateZ(10px) translateY(-1px);
-    }
-    .link-sub {
-      color: #c7c2b0; 
-      font-size: clamp(0.7rem, 1.5vw, 0.8rem);
-      text-shadow: 0 1px 1px rgba(0,0,0,0.8);
-      opacity: 0.9;
-    }
-
-    footer {
-      margin-top: var(--spacing-md); 
-      color: #bfb9a2; 
-      font-size: clamp(0.8rem, 1.5vw, 0.9rem); 
-      text-align: center;
-      text-shadow: var(--text-shadow-base);
-      opacity: 0.8;
-      transform: perspective(500px) translateZ(2px);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>雷加尔魔兽世界-秘境魔方-wlk3.3.5</title>
+    <!-- Tailwind CSS (预编译) -->
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <link href="css/tailwind-custom.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <!-- Three.js -->
+    <script src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    
+    <!-- 已迁移至 css/tailwind-custom.css 和 tailwind.config.js（预编译） -->
+    
+    <!-- 已迁移至 css/tailwind-custom.css（预编译） -->
 </head>
-<body>
-  <div class="frame" id="frame">
-    <header class="hero">
-      <h1>雷加尔魔兽·秘境魔方</h1>
-      <p class="tagline">穿越艾泽拉斯 11月新版本  从这里启程</p>
-      <div class="faction-toggle" role="group" aria-label="阵营主题切换">
-        <button class="btn alliance active" data-faction="alliance" aria-pressed="true">联盟</button>
-        <button class="btn horde" data-faction="horde" aria-pressed="false">部落</button>
-      </div>
+<body class="bg-dark text-white min-h-screen font-sans">
+    <!-- 背景效果 -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-[url('images/bg-main.jpeg')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-dark to-dark-light opacity-90"></div>
+    </div>
+
+
+    <!-- 导航栏 -->
+    <nav class="relative z-10 bg-dark bg-opacity-90 backdrop-blur-md border-b border-gold border-opacity-30">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
+            <div class="flex items-center space-x-2 w-full md:w-auto">
+                <img src="images/logo-nav.jpeg" alt="魔兽世界Logo" class="h-10 w-10">
+                <span class="text-xl font-bold text-gold truncate hidden sm:inline-block">魔兽世界 - 雷加尔S3赛季-秘境魔方</span>
+                <span class="text-sm font-bold text-gold truncate sm:hidden">雷加尔魔兽</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-6 mt-4 md:mt-0">
+                <a href="#downloads" class="text-gray-300 hover:text-gold transition-colors">下载中心</a>
+                <a href="#downloads" class="text-gray-300 hover:text-gold transition-colors">安装指南</a>
+                <a href="#downloads" class="text-gray-300 hover:text-gold transition-colors">游戏攻略</a>
+                <a href="#downloads" class="text-gray-300 hover:text-gold transition-colors">常见问题</a>
+                <a href="https://qm.qq.com/q/TMC19dCy8a" class="text-gray-300 hover:text-gold transition-colors flex items-center" target="_blank">
+                    <i class="fa fa-qq mr-1"></i> 交流群
+                </a>
+            </div>
+            
+            <div class="md:hidden flex items-center mt-4 md:mt-0">
+                <button id="mobile-menu-button" class="text-gray-300 hover:text-gold">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden w-full mt-4 pb-2">
+                <a href="#downloads" class="block py-2 text-gray-300 hover:text-gold transition-colors">下载中心</a>
+                <a href="#guide" class="block py-2 text-gray-300 hover:text-gold transition-colors">安装指南</a>
+                <a href="#downloads" class="block py-2 text-gray-300 hover:text-gold transition-colors">游戏攻略</a>
+                <a href="#faq" class="block py-2 text-gray-300 hover:text-gold transition-colors">常见问题</a>
+                <a href="https://qm.qq.com/q/TMC19dCy8a" class="block py-2 text-gray-300 hover:text-gold transition-colors flex items-center" target="_blank">
+                    <i class="fa fa-qq mr-2"></i> 点击加入玩家QQ群
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主视觉区域 -->
+    <header class="relative z-10 pt-16 pb-12 md:pt-32 md:pb-24">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 text-center md:text-left">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-shadow-glow">
+                        <span class="text-gold">雷加尔魔兽</span> - <span class="text-glow-blue">秘境魔方</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-300 mb-8">
+                        2025年11月新服 内部测试中 即将开启新的冒险之旅
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                        <a href="#downloads" class="download-btn bg-primary hover:bg-opacity-90 text-gold font-bold py-3 px-6 rounded-lg flex items-center border border-gold border-opacity-50">
+                            <i class="fa fa-download mr-2"></i> 游戏中心
+                        </a>
+                        <a href="https://qm.qq.com/q/TMC19dCy8a" class="bg-dark-light hover:bg-opacity-80 text-gold font-bold py-3 px-6 rounded-lg border border-gold border-opacity-30 flex items-center" target="_blank">
+                            <i class="fa fa-qq mr-2"></i> 加入QQ群
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 animate-float flex items-center justify-center">
+                        <img src="images/logo-hero.jpeg" alt="魔兽世界标志" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main class="groups">
-      <section class="group">
-        <h2>官方公告</h2>
-        <ul class="link-list">
-          <li><a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=arnppRjBMQkkyQEDmtPAUTSqHitkeAo4&authKey=o%2B1Ch2kxY314bGK1LmDkGprBc8MCbS6ajuryWU0E6%2Fb7OwUGhAuCzP122cUW0Dq0&noverify=0&group_code=971948904" target="_blank" rel="noopener noreferrer">游戏玩家QQ群 <span class="link-sub">点击加入</span></a></li>
-          <li><a href="https://www.battle.net/" target="_blank" rel="noopener noreferrer">游戏公告<span class="link-sub"></span>服务器内部测试中</a></li>
-          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">游戏更新<span class="link-sub"></span>服务器内部测试中</a></li>
-        </ul>
-      </section>
+    <!-- 下载区域 -->
+    <section id="downloads" class="relative z-10 py-16 bg-dark bg-opacity-70 border-t border-b border-gold border-opacity-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-2 text-center text-gold">游戏中心</h2>
+            <p class="text-gray-400 text-center mb-12 px-4">点击下方按钮下载所需文件 自己需要什么就下载什么</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 登录器下载卡片 -->
+                <div class="bg-dark-light rounded-xl overflow-hidden shadow-lg card-hover border border-gold border-opacity-30">
+                    <div class="p-6">
+                        <div class="w-14 h-14 bg-primary bg-opacity-20 rounded-lg flex items-center justify-center mb-4 border border-gold border-opacity-50">
+                            <i class="fa fa-key text-2xl text-gold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gold">秘境魔方-登录器+完整游戏补丁</h3>
+                        <p class="text-gray-300 mb-4">魔兽世界登录必备工具，确保您能够正常进入艾泽拉斯世界</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-2">
+                            <div><i class="fa fa-file-archive-o mr-1"></i> 7z 压缩包</div>
+                            <div><i class="fa fa-clock-o mr-1"></i> 更新于 2025-07-21</div>
+                        </div>
+                        <button class="download-btn w-full bg-primary hover:bg-opacity-90 text-gold font-bold py-3 px-6 rounded-lg flex items-center justify-center" 
+                                data-file="login" 
+                                data-url="https://qm.qq.com/q/TMC19dCy8a"
+                                data-name="魔兽世界-雷加尔-魔方-登录器.7z">
+                            <i class="fa fa-download mr-2"></i> 新版本测试中
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 客户端下载卡片 -->
+                <div class="bg-dark-light rounded-xl overflow-hidden shadow-lg card-hover border border-gold border-opacity-30">
+                    <div class="p-6">
+                        <div class="w-14 h-14 bg-secondary bg-opacity-20 rounded-lg flex items-center justify-center mb-4 border border-gold border-opacity-50">
+                            <i class="fa fa-gamepad text-2xl text-gold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gold">本服定制335高清客户端</h3>
+                        <p class="text-gray-300 mb-4">本服专用的高清环境和法术补丁 按照说明自行安装</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-2">
+                            <div><i class="fa fa-file-archive-o mr-1"></i> 多个文件</div>
+                            <div><i class="fa fa-exclamation-triangle mr-1 text-yellow-500"></i> 需全部下载</div>
+                        </div>
+                        <button class="download-btn w-full bg-secondary hover:bg-opacity-90 text-gold font-bold py-3 px-6 rounded-lg flex items-center justify-center"
+                                data-file="client"
+                                data-url="https://qfile.qq.com/q/nO92if4krm"
+                                data-name="魔兽世界335高清客户端">
+                            <i class="fa fa-download mr-2"></i> 开始下载
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 插件下载卡片 -->
+                <div class="bg-dark-light rounded-xl overflow-hidden shadow-lg card-hover border border-gold border-opacity-30">
+                    <div class="p-6">
+                        <div class="w-14 h-14 bg-tertiary bg-opacity-20 rounded-lg flex items-center justify-center mb-4 border border-gold border-opacity-50">
+                            <i class="fa fa-puzzle-piece text-2xl text-gold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gold">游戏插件</h3>
+                        <p class="text-gray-300 mb-4">GM精选专用定制插件 首推大脚插件 不要使用ElvUI插件包 容易游戏界面错位</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-2">
+                            <div><i class="fa fa-file-archive-o mr-1"></i> 压缩包</div>
+                            <div><i class="fa fa-star mr-1 text-yellow-500"></i> 推荐安装</div>
+                        </div>
+                        <button class="download-btn w-full bg-tertiary hover:bg-opacity-90 text-gold font-bold py-3 px-6 rounded-lg flex items-center justify-center"
+                                data-file="plugins"
+                                data-url="https://qfile.qq.com/q/CDerNlgZWg"
+                                data-name="魔兽世界专用插件合集">
+                            <i class="fa fa-download mr-2"></i> 开始下载
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 游戏攻略下载卡片 -->
+                <div class="bg-dark-light rounded-xl overflow-hidden shadow-lg card-hover border border-gold border-opacity-30">
+                    <div class="p-6">
+                        <div class="w-14 h-14 bg-blue-800 bg-opacity-20 rounded-lg flex items-center justify-center mb-4 border border-gold border-opacity-50">
+                            <i class="fa fa-book text-2xl text-gold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gold">游戏攻略</h3>
+                        <p class="text-gray-300 mb-4">详细游戏攻略，帮助您快速上手游戏，了解游戏机制</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-2">
+                            <div><i class="fa fa-file-pdf-o mr-1"></i> 玩家必看</div>
+                            <div><i class="fa fa-info-circle mr-1 text-blue-400"></i> 详细攻略</div>
+                        </div>
+                        <button class="download-btn w-full bg-blue-800 hover:bg-opacity-90 text-gold font-bold py-3 px-6 rounded-lg flex items-center justify-center"
+                                data-file="guide"
+                                data-url="https://docs.qq.com/doc/DRmJ0ZVpvRU1RWkhO"
+                                data-name="魔兽世界游戏攻略大全.pdf">
+                            <i class="fa fa-download mr-2"></i> 点击查询
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <section class="group">
-        <h2>游戏下载区</h2>
-        <ul class="link-list">
-          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">登录器和完整补丁<span class="link-sub"></span>内部测试中</a></li>
-          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">本服专用高清客户端<span class="link-sub"></span>335版本</a></li>
-          <li><a href="https://news.blizzard.com/" target="_blank" rel="noopener noreferrer">游戏插件<span class="link-sub"></span>服务器内部测试中</a></li>
-        </ul>
-      </section>
 
-      <section class="group">
-        <h2>游戏攻略</h2>
-        <ul class="link-list">
-          <li><a href="https://docs.qq.com/aio/DYmJra2dKdm5LR1V5?p=1czsPZJAw4Y22fhwZrp5NT" target="_blank" rel="noopener noreferrer">游戏介绍<span class="link-sub"></span>玩家必看</a></li>
-          <li><a href="https://wago.io/" target="_blank" rel="noopener noreferrer">Wago.io <span class="link-sub">WA字符串与模组</span></a></li>
-          <li><a href="https://www.tukui.org/" target="_blank" rel="noopener noreferrer">Tukui <span class="link-sub">ElvUI/BenikUI</span></a></li>
-          <li><a href="https://simplearmory.com/" target="_blank" rel="noopener noreferrer">Simple Armory <span class="link-sub">成就与收藏</span></a></li>
-        </ul>
-      </section>
-    </main>
 
-    <footer>
-      本页面游戏内容只提供学习研究！玩家游戏研究QQ群:971948904  
+    <!-- 页脚 -->
+    <footer class="relative z-10 bg-dark py-10 border-t border-gold border-opacity-30">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <img src="images/logo-nav.jpeg" alt="魔兽世界Logo" class="h-8 w-8">
+                        <span class="text-lg font-bold text-gold">雷加尔魔兽 - 秘境魔方</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-2">© 2025 雷加尔魔兽世界 版权所有</p>
+                </div>
+                
+                <div class="flex flex-col items-center md:items-end">
+                    <p class="text-gray-300 mb-2">玩家QQ交流群：971948904</p>
+                    <a href="https://qm.qq.com/q/TMC19dCy8a" class="text-gold hover:text-gold/80 transition-colors" target="_blank">
+                        <i class="fa fa-qq mr-1"></i> 点击加入
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
-  </div>
 
-  <script>
-    (function() {
-      // 修复阵营切换功能
-      const root = document.documentElement;
-      const btns = document.querySelectorAll('.faction-toggle .btn');
-      let saved = localStorage.getItem('wowNavFaction') || 'alliance';
-
-      // 确保初始状态正确
-      function applyFaction(faction) {
-        // 移除所有按钮的active类
-        btns.forEach(btn => {
-          btn.classList.remove('active');
-          btn.setAttribute('aria-pressed', 'false');
+    <script>
+        // 移动端菜单切换
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
         });
-        // 给当前阵营按钮添加active类
-        const activeBtn = document.querySelector(`.btn[data-faction="${faction}"]`);
-        if (activeBtn) {
-          activeBtn.classList.add('active');
-          activeBtn.setAttribute('aria-pressed', 'true');
-        }
-        // 更新根元素属性和本地存储
-        root.setAttribute('data-faction', faction);
-        localStorage.setItem('wowNavFaction', faction);
-      }
 
-      // 绑定按钮点击事件（确保事件能正常触发）
-      btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          applyFaction(btn.dataset.faction);
+        // 下载按钮点击事件
+        document.querySelectorAll('.download-btn[data-url]').forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            });
         });
-        // 支持键盘操作
-        btn.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            applyFaction(btn.dataset.faction);
-          }
-        });
-      });
 
-      // 初始化
-      applyFaction(saved);
-
-      // 修复链接点击效果 - 只保留视觉反馈，移除重复打开窗口的逻辑
-      document.querySelectorAll('.link-list a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          // 仅保留视觉反馈，不干预<a>标签的默认跳转行为
-          this.style.opacity = '0.8';
-          // 移除了window.open()调用，避免与<a>标签默认行为冲突
-          setTimeout(() => {
-            this.style.opacity = '1'; // 可选项：恢复透明度
-          }, 150);
+        // FAQ折叠功能
+        document.querySelectorAll('.faq-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
         });
-      });
-    })();
-  </script>
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动菜单（如果打开）
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
-
 </html>
-
-
